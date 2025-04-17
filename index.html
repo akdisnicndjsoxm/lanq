@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随机听写词语</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #wordDisplay {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>随机听写词语</h1>
+    <div id="wordDisplay"></div>
+    <button onclick="generateWord()">听写下一个词语</button>
+
+    <script>
+        // 词语列表
+        const words = [
+            "蝴蝶", "蜻蜓", "蚂蚱", "圆滚滚", "明晃晃", "樱桃", "榆树", "瞎闹", "锄头", "承认", 
+            "随意", "妒忌", "委托", "照办", "预计", "急需", "军令状", "探听", "疑惑", "私自", 
+            "布置", "调度", "呐喊", "神机妙算", "半夜三更", "寻思", "耻笑", "胸膛", "武艺", 
+            "拟定", "参谋", "损失", "锻炼", "情不自禁", "慰问", "眷恋", "奔赴", "繁忙", 
+            "特殊", "尊重", "签字", "下意识", "踌躇", "诊所", "年龄", "熟练", "审视", 
+            "一针见血", "施行", "清醒", "颤抖", "一声不吭", "崭新", "由衷", "苍白", "慈祥", 
+            "肃然起敬", "荣幸"
+        ];
+
+        // 已经随机过的词语
+        const usedWords = new Set();
+
+        // 显示拼音的函数
+        function showPinyin(word) {
+            const pinyinMap = {
+                "蝴蝶": "hú dié", "蜻蜓": "qīng tíng", "蚂蚱": "mà zha", "圆滚滚": "yuán gǔn gǔn", 
+                "明晃晃": "míng huǎng huǎng", "樱桃": "yīng tao", "榆树": "yú shù", "瞎闹": "xiā nào", 
+                "锄头": "chú tóu", "承认": "chéng rèn", "随意": "suí yì", "妒忌": "dù jì", "委托": "wěi tuō", 
+                "照办": "zhào bàn", "预计": "yù jì", "急需": "jí xū", "军令状": "jūn lìng zhuàng", 
+                "探听": "tàn tīng", "疑惑": "yí huò", "私自": "sī zì", "布置": "bù zhì", "调度": "diào dù", 
+                "呐喊": "nà hǎn", "神机妙算": "shén jī miào suàn", "半夜三更": "bàn yè sān gēng", 
+                "寻思": "xún si", "耻笑": "chǐ xiào", "胸膛": "xiōng táng", "武艺": "wǔ yì", "拟定": "nǐ dìng", 
+                "参谋": "cān móu", "损失": "sǔn shī", "锻炼": "duàn liàn", "情不自禁": "qíng bù zì jīn", 
+                "慰问": "wèi wèn", "眷恋": "juàn liàn", "奔赴": "bēn fù", "繁忙": "fán máng", "特殊": "tè shū", 
+                "尊重": "zūn zhòng", "签字": "qiān zì", "下意识": "xià yì shí", "踌躇": "chóu chú", 
+                "诊所": "zhěn suǒ", "年龄": "nián líng", "熟练": "shú liàn", "审视": "shěn shì", 
+                "一针见血": "yī zhēn jiàn xiě", "施行": "shī xíng", "清醒": "qīng xǐng", "颤抖": "chàn dǒu", 
+                "一声不吭": "yī shēng bù kēng", "崭新": "zhǎn xīn", "由衷": "yóu zhōng", "苍白": "cāng bái", 
+                "慈祥": "cí xiáng", "肃然起敬": "sù rán qǐ jìng", "荣幸": "róng xìng"
+            };
+            return pinyinMap[word];
+        }
+
+        // 生成随机词语并显示拼音
+        function generateWord() {
+            if (usedWords.size === words.length) {
+                alert("所有词语都已随机过一遍了！");
+                usedWords.clear();
+            }
+
+            let randomWord;
+            do {
+                const randomIndex = Math.floor(Math.random() * words.length);
+                randomWord = words[randomIndex];
+            } while (usedWords.has(randomWord));
+
+            usedWords.add(randomWord);
+
+            const pinyin = showPinyin(randomWord);
+            document.getElementById("wordDisplay").innerText = pinyin;
+
+            // 使用语音合成念出词语
+            if (window.speechSynthesis) {
+                const utterance = new SpeechSynthesisUtterance(randomWord);
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("您的浏览器不支持语音合成功能！");
+            }
+        }
+    </script>
+</body>
+</html>
